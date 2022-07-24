@@ -11,15 +11,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use('/api', api);
 
-// sends to default directory
-app.get('/', (req, res) =>
-    res.sendFile(path.join(__dirname, '/develop/public/index.html'))
-);
+
 
 // sends to default directory
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/develop/public/notes.html'))
 );
+
+
+
+app.get('/assets/js/index.js', (req, res) =>
+    res.sendFile(path.join(__dirname, '/develop/public/assets/js/index.js'))
+);
+
+
 
 const notes = require('express').Router();
 // const { readFromFile, readAndAppend } = require('./helpers/fsUtils.js');
@@ -50,6 +55,11 @@ notes.post('/', (req, res) => {
         res.error('Error in adding note');
     }
 });
+
+// sends to default directory
+app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, '/develop/public/index.html'))
+);
 
 app.listen(PORT, () =>
     console.log(`App listening at http://localhost:${PORT} 🚀`)

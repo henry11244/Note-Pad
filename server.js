@@ -4,7 +4,7 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const { clog } = require('./develop/middleware/clog.js');
-let notes = require('./develop/db/db.json');
+var notes = require('./develop/db/db.json');
 
 const PORT = process.env.PORT || 3001;
 
@@ -32,11 +32,13 @@ app.get('/notes', (req, res) =>
 
 // get request for notes list. returns json format of notes
 app.get("/api/notes", (req, res) =>
+
     res.json(notes)
 );
 
 
 app.post("/api/notes", (req, res) => {
+    console.log('test');
     const { title, text, id } = req.body;
     const newNote = {
         title: title,
@@ -44,8 +46,9 @@ app.post("/api/notes", (req, res) => {
         id: uuidv4()
         // uuidv4(),
     };
+    console.log('saved')
     // notes.push(newNote);
-    fs.readFile('develop/db/db.json', 'utf8', (err, data) => {
+    fs.readFile('./develop/db/db.json', 'utf8', (err, data) => {
         if (err) {
             console.error(err);
         } else {
@@ -54,8 +57,9 @@ app.post("/api/notes", (req, res) => {
             // Add a new review
             ParsedNotes.push(newNote);
             notes = ParsedNotes;
-
-            fs.writeFile("/develop/db/db.json", JSON.stringify(notes), (err) =>
+            console.log(ParsedNotes)
+            console.log(notes)
+            fs.writeFile("./develop/db/db.json", JSON.stringify(notes), (err) =>
                 err ? console.error(err) : console.log("file written")
             );
             res.send(notes);
@@ -65,7 +69,7 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:note", (req, res) => {
     console.log(req.params.id);
-    const index = notes
+    let index = notes
         .map((item) => {
             return item.id;
         })

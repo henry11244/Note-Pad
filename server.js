@@ -56,9 +56,6 @@ app.post("/api/notes", (req, res) => {
 
             // Add a new review
             ParsedNotes.push(newNote);
-            notes = ParsedNotes;
-            console.log(ParsedNotes)
-            console.log(notes)
             fs.writeFile("./develop/db/db.json", JSON.stringify(notes), (err) =>
                 err ? console.error(err) : console.log("file written")
             );
@@ -68,18 +65,19 @@ app.post("/api/notes", (req, res) => {
 });
 
 app.delete("/api/notes/:note", (req, res) => {
-    console.log(req.params.id);
-    let index = notes
-        .map((item) => {
-            return item.id;
-        })
-        .indexOf(req.params.id);
-    notes.splice(index, 1);
+    const noteId = req.params.id;
+    readFromFile('./db/db.json')
+        .then((data) => JSON.parse(data))
+        .then((json) => {
+            // Make a new array of all tips except the one with the ID provided in the URL
+            const result = json.filter((note) => note.id !== noteId);
 
-    fs.writeFile("/develop/db/db.json", JSON.stringify(note), (err) =>
-        err ? console.error(err) : console.log("file written")
-    );
-    res.json({});
+            // Save that array to the filesystem
+            writeToFile('./db/tips.json', result);
+
+            // Respond to the DELETE request
+            res.json(`Item ${noteId} has been deleted 🗑️`);
+        });
 });
 
 app.listen(PORT, () =>

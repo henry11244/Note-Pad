@@ -4,11 +4,11 @@ const { v4: uuidv4 } = require('uuid');
 const path = require("path");
 const noteData = require("./db/db.json");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-// Sets up the Express app to handle data parsing
+// Tool for middleware transition
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -35,10 +35,40 @@ app.post("/api/notes", (req, res) => {
     };
     noteData.push(newNote);
     fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
-        err ? console.error(err) : console.log("Success")
+        err ? console.error(err) : console.log("Write successful")
     );
     res.send(noteData);
 });
+
+app.post("/api/notes", (req, res) => {
+    console.log('test');
+    const { title, text, id } = req.body;
+    const newNote = {
+        title: title,
+        text: text,
+        id: uuidv4()
+        // uuidv4(),
+    };
+    console.log('saved')
+    // notes.push(newNote);
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            const ParsedNotes = JSON.parse(data);
+
+            // Add a new review
+            ParsedNotes.push(newNote);
+            fs.writeFile("./db/db.json", JSON.stringify(notes), (err) =>
+                err ? console.error(err) : console.log("file written")
+            );
+            res.send(notes);
+        }
+    })
+});
+
+
+
 
 app.delete("/api/notes/:id", (req, res) => {
     console.log(req.params.id);
@@ -50,7 +80,7 @@ app.delete("/api/notes/:id", (req, res) => {
     noteData.splice(index, 1);
 
     fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
-        err ? console.error(err) : console.log("Success")
+        err ? console.error(err) : console.log("Delete successful")
     );
     res.json({});
 });

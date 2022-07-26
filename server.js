@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
 const path = require("path");
-const noteData = require("./db/db.json");
+const notesDB = require("./db/db.json");
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,16 +15,14 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-    console.log("in here");
-    //   console.log(__dirname);
     res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 app.get("/notes", (req, res) => {
     console.log("in here");
-    //   console.log(__dirname);
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
-app.get("/api/notes", (req, res) => res.json(noteData));
+
+app.get("/api/notes", (req, res) => res.json(notesDB));
 
 app.post("/api/notes", (req, res) => {
     const { title, text } = req.body;
@@ -33,11 +31,11 @@ app.post("/api/notes", (req, res) => {
         text: text,
         id: uuidv4(),
     };
-    noteData.push(newNote);
-    fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
+    notesDB.push(newNote);
+    fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
         err ? console.error(err) : console.log("Write successful")
     );
-    res.send(noteData);
+    res.send(notesDB);
 });
 
 app.post("/api/notes", (req, res) => {
@@ -50,14 +48,11 @@ app.post("/api/notes", (req, res) => {
         // uuidv4(),
     };
     console.log('saved')
-    // notes.push(newNote);
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
         if (err) {
             console.error(err);
         } else {
             const ParsedNotes = JSON.parse(data);
-
-            // Add a new review
             ParsedNotes.push(newNote);
             fs.writeFile("./db/db.json", JSON.stringify(notes), (err) =>
                 err ? console.error(err) : console.log("file written")
@@ -72,15 +67,15 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
     console.log(req.params.id);
-    const index = noteData
+    const index = notesDB
         .map((item) => {
             return item.id;
         })
         .indexOf(req.params.id);
-    noteData.splice(index, 1);
+    notesDB.splice(index, 1);
 
-    fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
-        err ? console.error(err) : console.log("Delete successful")
+    fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
+        err ? console.error(err) : console.log("Note Deleted")
     );
     res.json({});
 });

@@ -7,7 +7,7 @@ const { clog } = require('./develop/middleware/clog.js');
 var notes = require('./develop/db/db.json');
 const api = require('./routes/index.js');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -65,21 +65,21 @@ app.post("/api/notes", (req, res) => {
     })
 });
 
-app.delete("/api/notes/:note", (req, res) => {
-    const noteId = req.params.id;
-    readFromFile('develop/db/db.json')
-        .then((data) => JSON.parse(data))
-        .then((json) => {
-            // Make a new array of all tips except the one with the ID provided in the URL
-            const result = json.filter((note) => note.id !== noteId);
+// app.delete("/api/notes/:note", (req, res) => {
+//     const noteId = req.params.id;
+//     readFromFile('develop/db/db.json')
+//         .then((data) => JSON.parse(data))
+//         .then((json) => {
+//             // Make a new array of all tips except the one with the ID provided in the URL
+//             const result = json.filter((note) => note.id !== noteId);
 
-            // Save that array to the filesystem
-            writeToFile('develop/db/tips.json', result);
+//             // Save that array to the filesystem
+//             writeToFile('develop/db/tips.json', result);
 
-            // Respond to the DELETE request
-            res.json(`Item ${noteId} has been deleted 🗑️`);
-        });
-});
+//             // Respond to the DELETE request
+//             res.json(`Item ${noteId} has been deleted 🗑️`);
+//         });
+// });
 
 app.listen(PORT, () =>
     console.log(`App listening at http://localhost:${PORT}`)

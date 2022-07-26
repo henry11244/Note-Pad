@@ -45,6 +45,8 @@ The motivation behind this project is to create an intuitive note taking applica
 
 ## Instructions
 
+Live Link: [https://henry-note-pad.herokuapp.com/](https://henry-note-pad.herokuapp.com/)
+
 Follow the instructions below to us the note taking application: 
 
 - When you navagate to the web-based application linked above, you will be presented with a home page that contains a link to the note taking application.
@@ -52,13 +54,7 @@ Follow the instructions below to us the note taking application:
 - Once you are redirected to the note taking application, you will presented with previously saved notes as well as an option to create new notes in the center of the screen. 
 - Once a new note is drafted, you can save the note by selecting the save icon in the top right corner of the screen.
 
-
-## Usage
-
-Refer to video linked below for a demonstration of the application:
-
-[![Watch the video](img/VideoPreview.png)](https://drive.google.com/file/d/1iP9ZW_TUS2t4h-a2XdA56xzxs0AgcooM/view?usp=sharing)
-
+![Alt Text](img/Note_Taker.gif)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

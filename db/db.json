@@ -1,12 +1,1 @@
-[
-    {
-        "title": "test",
-        "text": "test",
-        "id": "64847727-dbde-414a-b5b6-337dd307d613"
-    },
-    {
-        "title": "test 2",
-        "text": "test 2",
-        "id": "80f6738f-0cf9-4da6-b203-5031f7f832eb"
-    }
-]
+[{"title":"test","text":"test","id":"64847727-dbde-414a-b5b6-337dd307d613"},{"title":"test 2","text":"test 2","id":"80f6738f-0cf9-4da6-b203-5031f7f832eb"},{"title":"test 3","text":"test 3","id":"b98bc20f-5c27-4034-8a9b-88d3015adcbd"}]

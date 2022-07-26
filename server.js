@@ -69,17 +69,24 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
     console.log(req.params.id);
-    const index = notesDB
-        .map((item) => {
-            return item.id;
-        })
-        .indexOf(req.params.id);
-    noteData.splice(index, 1);
 
-    fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
-        err ? console.error(err) : console.log("Success")
-    );
-    res.json({});
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else { const Notes = JSON.parse(data); }
+
+        var index = Notes
+            .map((note) => {
+                return note.id;
+            })
+            .indexOf(req.params.id);
+        noteData.splice(index, 1);
+
+        fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
+            err ? console.error(err) : console.log("Success")
+        );
+        res.json({});
+    })
 });
 
 app.listen(PORT, () => {

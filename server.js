@@ -1,6 +1,6 @@
 const express = require("express");
 const fs = require("fs");
-const { randomUUID } = require("crypto");
+const { v4: uuidv4 } = require('uuid');
 const path = require("path");
 const noteData = require("./db/db.json");
 
@@ -29,9 +29,9 @@ app.get("/api/notes", (req, res) => res.json(noteData));
 app.post("/api/notes", (req, res) => {
     const { title, text } = req.body;
     const newNote = {
-        id: randomUUID(),
         title: title,
         text: text,
+        id: uuidv4(),
     };
     noteData.push(newNote);
     fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>

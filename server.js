@@ -67,6 +67,21 @@ app.post("/api/notes", (req, res) => {
     })
 });
 
+app.delete("/api/notes/:id", (req, res) => {
+    console.log(req.params.id);
+    const index = noteData
+        .map((item) => {
+            return item.id;
+        })
+        .indexOf(req.params.id);
+    noteData.splice(index, 1);
+
+    fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
+        err ? console.error(err) : console.log("Success")
+    );
+    res.json({});
+});
+
 app.listen(PORT, () => {
     console.log(`Example app listening at https://localhost:${PORT}`);
 });

@@ -3,20 +3,21 @@ const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
-// const { clog } = require('/develop/middleware/clog.js');
+const { clog } = require('./develop/middleware/clog.js');
 var notes = require('./develop/db/db.json');
+var notes = require('server.js');
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 
 // Import custom middleware, "cLog"
-// app.use(clog);
+app.use(clog);
 
 // Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use('/api', api);
+app.use('/api', api);
 
 app.use(express.static('develop/public'));
 

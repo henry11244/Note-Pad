@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const { randomUUID } = require("crypto");
 const path = require("path");
-const noteData = require("./develop/db/db.json");
+const noteData = require("./db/db.json");
 
 const PORT = process.env.PORT || 3000;
 
@@ -17,12 +17,12 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
     console.log("in here");
     //   console.log(__dirname);
-    res.sendFile(path.join(__dirname, "./develop/public/index.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 app.get("/notes", (req, res) => {
     console.log("in here");
     //   console.log(__dirname);
-    res.sendFile(path.join(__dirname, "./develop/public/notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 app.get("/api/notes", (req, res) => res.json(noteData));
 
@@ -34,7 +34,7 @@ app.post("/api/notes", (req, res) => {
         text: text,
     };
     noteData.push(newNote);
-    fs.writeFile("./develop/db/db.json", JSON.stringify(noteData), (err) =>
+    fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
         err ? console.error(err) : console.log("Success")
     );
     res.send(noteData);
@@ -49,7 +49,7 @@ app.delete("/api/notes/:id", (req, res) => {
         .indexOf(req.params.id);
     noteData.splice(index, 1);
 
-    fs.writeFile("./develop/db/db.json", JSON.stringify(noteData), (err) =>
+    fs.writeFile("./db/db.json", JSON.stringify(noteData), (err) =>
         err ? console.error(err) : console.log("Success")
     );
     res.json({});
@@ -57,7 +57,6 @@ app.delete("/api/notes/:id", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Example app listening at https://localhost:${PORT}`);
 });
-
 
 
 

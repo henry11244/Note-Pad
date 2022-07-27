@@ -21,72 +21,45 @@ app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
+// get function for initial page load
 app.get("/api/notes", (req, res) => res.json(notesDB));
 
+// post functions for new notes
 app.post("/api/notes", (req, res) => {
+    // defines item of the body of the request sent from the index.js file
     const { title, text } = req.body;
     const newNote = {
         title: title,
         text: text,
+        // randomly generated ID
         id: uuidv4(),
     };
+    // pushes new note to existing DB
     notesDB.push(newNote);
+    // overwrites DB file with new DB that contains new note
     fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
         err ? console.error(err) : console.log("test")
     );
-    res.send(notesDB);
+    res.send();
 });
 
-// post function to post new items to database
-app.post("/api/notes", (req, res) => {
-    console.log('test');
-    const { title, text, id } = req.body;
-    const newNote = {
-        title: title,
-        text: text,
-        //    randomly generated ID
-        id: uuidv4()
-
-    };
-    // Reads database with past notes
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-        } else {
-
-            // turns note data from above into Json
-            const Notes = JSON.parse(data);
-            // pushes new note to parsed notes array
-            Notes.push(newNote);
-            // Creates new db.json file with new note
-            fs.writeFile("./db/db.json", JSON.stringify(notes), (err) =>
-                err ? console.error(err) : console.log("test")
-            );
-            res.send(notes);
-        }
-    })
-});
-
+// Initiate Delete directory
 app.delete("/api/notes/:id", (req, res) => {
+    // console logs ID for delete URL
     console.log(req.params.id);
 
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-        } else { const Notes = JSON.parse(data); }
-
-        var index = Notes
-            .map((note) => {
-                return note.id;
-            })
-            .indexOf(req.params.id);
-        noteData.splice(index, 1);
-
-        fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
-            err ? console.error(err) : console.log("Success")
-        );
-        res.json({});
-    })
+    // loops through notes database searching for the note ID, the removes that note using the splice function 
+    for (i = 0; i < notesDB.length; i++) {
+        if (notesDB[i].id == req.params.id) {
+            notesDB.splice(i, 1)
+            console.log(notesDB)
+        }
+    }
+    // overwrites existing database file with new db
+    fs.writeFile("./db/db.json", JSON.stringify(notesDB), (err) =>
+        err ? console.error(err) : console.log("Success")
+    );
+    res.json();
 });
 
 app.listen(PORT, () => {
